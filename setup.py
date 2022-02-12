@@ -7,15 +7,15 @@ with open("requirements.txt") as fh:
     requirements = fh.read().split("\n")
 
 setup(
-    name="vmgooglesearch",
-    version="1.1.0",
+    name="vm_googlesearch",
+    version="1.0",
     author="Vishal Mohanty",
     author_email="vishalmohanty97@gmail.com",
     description="A Python library for scraping the Google search engine.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/vishalmohanty/googlesearch",
-    packages=["vmgooglesearch"],
+    packages=["vm_googlesearch"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
