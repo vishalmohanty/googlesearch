@@ -31,6 +31,7 @@ vmgooglesearch.search(str: term, int: num_results=10, str: lang="en") -> list
 ```
 
 ## Location based search
+We use WebSearcher's location to `uule` conversion to search based on locations. Refer https://github.com/vishalmohanty/WebSearcher#obtain-location-names
 ```python
 vmgooglesearch.search(str: term, int: num_results=10, location="Boston,Massachusetts,United States")
 ```
