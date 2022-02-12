@@ -7,7 +7,7 @@ with open("requirements.txt") as fh:
     requirements = fh.read().split("\n")
 
 setup(
-    name="googlesearch-python",
+    name="vmgooglesearch",
     version="1.1.0",
     author="Vishal Mohanty",
     author_email="vishalmohanty97@gmail.com",
@@ -15,7 +15,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/vishalmohanty/googlesearch",
-    packages=["vm-googlesearch"],
+    packages=["vmgooglesearch"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
