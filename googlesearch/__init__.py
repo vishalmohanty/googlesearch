@@ -1,63 +1,39 @@
 from bs4 import BeautifulSoup
 from requests import get
+from WebSearcher import locations
 
-usr_agent = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
+def fetch_results(search_term, location, number_results, language_code, proxy=None):
+        escaped_search_term = search_term.replace(' ', '+')
+        loc_id = locations.get_location_id(location)
+        usr_agent = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/61.0.3163.100 Safari/537.36'}
+        google_url = 'https://www.google.com/search?q={}&uule={}&num={}&hl={}'.format(escaped_search_term, loc_id, number_results+1,
+                                                                              language_code)
+        print("URL: %s"%google_url)
+        proxies = None
+        if proxy:
+            if proxy[:5]=="https":
+                proxies = {"https":proxy} 
+            else:
+                proxies = {"http":proxy}
+        
+        response = get(google_url, headers=usr_agent, proxies=proxies)    
+        response.raise_for_status()
 
-def _req(term, results, lang, start, proxies):
-    resp = get(
-        url="https://www.google.com/search",
-        headers=usr_agent,
-        params=dict(
-            q = term,
-            num = results + 2, # Prevents multiple requests
-            hl = lang,
-            start = start,
-        ),
-        proxies=proxies,
-    )
-    resp.raise_for_status()
-    return resp
+        return response.text
 
-class SearchResult:
-    def __init__(self, url, title, description):
-        self.url = url
-        self.title = title
-        self.description = description
+def parse_results(raw_html):
+    soup = BeautifulSoup(raw_html, 'html.parser')
+    result_block = soup.find_all('div', attrs={'class': 'g'})
+    for result in result_block:
+        link = result.find('a', href=True)
+        title = result.find('h3')
+        if link and title:
+            yield link['href']
 
-    def __repr__(self):
-        return f"SearchResult(url={self.url}, title={self.title}, description={self.description})"
-
-def search(term, num_results=10, lang="en", proxy=None, advanced=False):
-    escaped_term = term.replace(' ', '+')
-
-    # Proxy
-    proxies = None
-    if proxy:
-        if proxy[:5]=="https":
-            proxies = {"https": proxy} 
-        else:
-            proxies = {"http": proxy}
+def search(term, num_results=10, lang="en", location="", proxy=None):
     
-    # Fetch
-    start = 0
-    while start < num_results:
-        # Send request
-        resp = _req(escaped_term, num_results-start, lang, start, proxies)
 
-        # Parse
-        soup = BeautifulSoup(resp.text, 'html.parser')
-        result_block = soup.find_all('div', attrs={'class': 'g'})
-        for result in result_block:
-            # Find link, title, description
-            link = result.find('a', href=True)
-            title = result.find('h3')
-            description_box = result.find('div', {'style': '-webkit-line-clamp:2'})
-            if description_box:
-                description = description_box.find('span')
-                if link and title and description:
-                    start += 1
-                    if advanced:
-                        yield SearchResult(link['href'], title.text, description.text)
-                    else:
-                        yield link['href']
-
+    html = fetch_results(term, location, num_results, lang)
+    return list(parse_results(html))
