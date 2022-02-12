@@ -29,3 +29,8 @@ search("Google", lang="fr")
 ```python
 googlesearch.search(str: term, int: num_results=10, str: lang="en") -> list
 ```
+
+## Location based search
+```python
+googlesearch.search(str: term, int: num_results=10, location="Boston,Massachusetts,United States")
+```

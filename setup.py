@@ -9,13 +9,13 @@ with open("requirements.txt") as fh:
 setup(
     name="googlesearch-python",
     version="1.1.0",
-    author="Nishant Vikramaditya",
-    author_email="junk4Nv7@gmail.com",
+    author="Vishal Mohanty",
+    author_email="vishalmohanty97@gmail.com",
     description="A Python library for scraping the Google search engine.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Nv7-GitHub/googlesearch",
-    packages=["googlesearch"],
+    url="https://github.com/vishalmohanty/googlesearch",
+    packages=["vm-googlesearch"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
